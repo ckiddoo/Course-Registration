@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 
 
@@ -21,14 +22,27 @@ public class Student {
 		return this.password;
 	}
 	
+	public String getEmail(){
+		return this.email;
+	}
+	
 	public void enrollInCourse(Course courseToEnroll){
 		int numStudents = courseToEnroll.getCurrentEnrollment();
 		int maxStudents = courseToEnroll.getMaxEnrollment();
 		if(numStudents<maxStudents){
 			courseToEnroll.incrementCurrentEnrollment();
 			this.enrolledCourses.add(courseToEnroll);
-			System.out.print("You have successfully enrolled in " 
-			+ courseToEnroll.getName());
+			File enrollmentData = new File("enrollment_data.txt");
+			try {
+				enrollmentData.createNewFile();
+				PrintWriter pw = new PrintWriter(enrollmentData);
+				pw.write(this.getEmail()+","+courseToEnroll.getCourseID()+"\n");
+				pw.close();
+				System.out.print("You have successfully enrolled in " 
+						+ courseToEnroll.getName());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		else{
 			System.out.print(courseToEnroll.getName() +
