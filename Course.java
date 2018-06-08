@@ -11,7 +11,7 @@ public class Course {
 	
 	public Course(int courseID, Date startDate, 
 			Date endDate, String name, String description,
-			int maxEnrollment)
+			int maxEnrollment, int currentEnrollment)
 	{
 		this.courseID = courseID;
 		this.startDate = startDate;
@@ -19,7 +19,7 @@ public class Course {
 		this.name = name;
 		this.description = description;
 		this.maxEnrollment = maxEnrollment;
-		this.currentEnrollment = 0;
+		this.currentEnrollment = currentEnrollment;
 	}
 	
 	public int getCourseID(){

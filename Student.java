@@ -57,6 +57,7 @@ public class Student {
 			this.enrolledCourses.remove(courseInList);
 			System.out.print("You have successfully dropped "
 					+ courseToDrop.getName());
+			//To Do add functionality to remove enrollment from file
 		}
 		else{
 			System.out.print("You are not currently enrolled in "
