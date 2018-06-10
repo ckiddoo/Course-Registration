@@ -1,9 +1,11 @@
 import java.util.*;
 import java.io.*;
+import java.text.ParseException;
 
 public class Main {
 
 	private static Scanner in;
+	private static CourseList currentCourseList;
 
 	public static void main(String[] args) throws IOException {
 		// Auto-generated method stub
@@ -62,9 +64,59 @@ public class Main {
 		//Use email to create new student and use this as student for session
 		Student loggedInStudent = new Student(email,password);
 		
-		//To Do Add list of Courses
-		//To Do Add Registered Courses 
+		//Initialize current course list based on available data in txt file
+		try {
+			currentCourseList = new CourseList();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		//Add previously registered courses to student's registered courses
+		File enrollmentData = new File("enrollment_data.txt");
+		Scanner readEnrollment = new Scanner(enrollmentData);
+		while(readEnrollment.hasNextLine()){
+			String nextLine = readEnrollment.nextLine();
+			String[] lineData = nextLine.split(",");
+			String emailInFile = lineData[0];
+			Map<Integer,Integer> coursesFromEnrollment = new HashMap<Integer,Integer>();
+			if(emailInFile.equals(loggedInStudent.getEmail())){
+				coursesFromEnrollment.put(Integer.parseInt(lineData[1]), Integer.parseInt(lineData[2]));
+			}
+			for(Map.Entry<Integer, Integer> entry : coursesFromEnrollment.entrySet()){
+				int enrolledStatus = entry.getValue();
+				if(enrolledStatus == 1){
+					int courseID = entry.getKey();
+					Course courseToAdd = currentCourseList.get(courseID);
+					loggedInStudent.addCourseToEnrolled(courseToAdd);
+				}
+			}
+		}
+		readEnrollment.close();
+		
+		//Print Courses that student is currently enrolled in
+		loggedInStudent.getEnrolledCourses();
+		
+		//To Do Add list of Courses
+		ArrayList<Course> orderedCourses= currentCourseList.getCoursesInOrder();
+		//Print Course Info
+		for(Course course : orderedCourses){
+			System.out.println(course.getCourseID()+"|"+course.getName()+"|"+course.getDescription()+"|"
+					+course.getStartDate()+"|"+course.getEndDate()+"|"+course.getMaxEnrollment()+"|"+
+					course.getCurrentEnrollment());
+		}
+		
+		//Enroll In Course Based on CourseID
+		System.out.print("Please enter the course ID of the course that you wish to register for.");
+		int courseIDToRegister = in.nextInt();
+		Course courseToRegister = currentCourseList.get(courseIDToRegister);
+		loggedInStudent.enrollInCourse(courseToRegister);
+		
+		//Drop Course Based on CourseID
+		System.out.print("Please enter the course ID of the course that you wish to drop.");
+		int courseIDToDrop = in.nextInt();
+		Course courseToDrop = currentCourseList.get(courseIDToDrop);
+		loggedInStudent.dropCourse(courseToDrop);
 
 	}
 

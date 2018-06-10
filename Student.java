@@ -26,6 +26,10 @@ public class Student {
 		return this.email;
 	}
 	
+	public void addCourseToEnrolled(Course course){
+		enrolledCourses.add(course);
+	}
+	
 	public void enrollInCourse(Course courseToEnroll){
 		int numStudents = courseToEnroll.getCurrentEnrollment();
 		int maxStudents = courseToEnroll.getMaxEnrollment();
@@ -36,7 +40,7 @@ public class Student {
 			try {
 				enrollmentData.createNewFile();
 				PrintWriter pw = new PrintWriter(enrollmentData);
-				pw.write(this.getEmail()+","+courseToEnroll.getCourseID()+"\n");
+				pw.write(this.getEmail()+","+courseToEnroll.getCourseID()+"1"+"\n");
 				pw.close();
 				System.out.print("You have successfully enrolled in " 
 						+ courseToEnroll.getName());
@@ -55,13 +59,28 @@ public class Student {
 		if(courseInList >=0){
 			courseToDrop.decrementCurrentEnrollment();
 			this.enrolledCourses.remove(courseInList);
-			System.out.print("You have successfully dropped "
-					+ courseToDrop.getName());
+			File enrollmentData = new File("enrollment_data.txt");
+			try {
+				enrollmentData.createNewFile();
+				PrintWriter pw = new PrintWriter(enrollmentData);
+				pw.write(this.getEmail()+","+courseToDrop.getCourseID()+"-1"+"\n");
+				pw.close();
+				System.out.print("You have successfully dropped " 
+						+ courseToDrop.getName());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			//To Do add functionality to remove enrollment from file
 		}
 		else{
 			System.out.print("You are not currently enrolled in "
 					+ courseToDrop + "therefore it cannot be dropped.");
+		}
+	}
+	
+	public void getEnrolledCourses(){
+		for(Course course : this.enrolledCourses){
+			System.out.println(course.getCourseID()+"|"+course.getName()+"|"+course.getDescription()+"|");
 		}
 	}
 	
