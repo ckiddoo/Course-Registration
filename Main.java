@@ -34,7 +34,7 @@ public class Main {
 				while(!loginSuccessful){
 					password = in.next();
 					if(password.equals(passwordInFile)){
-						System.out.print("You have successfully logged in");
+						System.out.print("You have successfully logged in. \n");
 						loginSuccessful = true;
 				}
 					else{
@@ -94,29 +94,48 @@ public class Main {
 		}
 		readEnrollment.close();
 		
-		//Print Courses that student is currently enrolled in
-		loggedInStudent.getEnrolledCourses();
-		
-		//To Do Add list of Courses
-		ArrayList<Course> orderedCourses= currentCourseList.getCoursesInOrder();
-		//Print Course Info
-		for(Course course : orderedCourses){
-			System.out.println(course.getCourseID()+"|"+course.getName()+"|"+course.getDescription()+"|"
-					+course.getStartDate()+"|"+course.getEndDate()+"|"+course.getMaxEnrollment()+"|"+
-					course.getCurrentEnrollment());
+		boolean complete = false;
+		while(!complete){
+			System.out.print("What would you like to see? (Please enter the number corresponding to your choice)\n"
+					+ "1. All courses \n"
+					+ "2. Courses I have already registered for \n"
+					+ "3. Register for a course \n"
+					+ "4. Drop a course \n"
+					+ "5. Exit");
+			int optionSelected = in.nextInt();
+			
+			switch(optionSelected){
+			//Print all available courses
+			case 1: 	ArrayList<Course> orderedCourses= currentCourseList.getCoursesInOrder();
+						for(Course course : orderedCourses){
+							System.out.println(course.getCourseID()+"|"+course.getName()+"|"+course.getDescription()+"|"
+							+course.getStartDate()+"|"+course.getEndDate()+"|"+course.getMaxEnrollment()+"|"+
+							course.getCurrentEnrollment());
+			}break;
+			//Print Courses that student is currently enrolled in
+			case 2: 		loggedInStudent.getEnrolledCourses();
+							break;
+			
+			//Enroll In Course Based on CourseID
+			case 3:	System.out.print("Please enter the course ID of the course that you wish to register for.");
+					int courseIDToRegister = in.nextInt();
+					Course courseToRegister = currentCourseList.get(courseIDToRegister);
+					loggedInStudent.enrollInCourse(courseToRegister);
+					break;
+					//Drop Course Based on CourseID
+			case 4: 			
+					System.out.print("Please enter the course ID of the course that you wish to drop.");
+					int courseIDToDrop = in.nextInt();
+					Course courseToDrop = currentCourseList.get(courseIDToDrop);
+					loggedInStudent.dropCourse(courseToDrop);
+					break;
+			case 5: System.out.print("Thank you for signing in.");
+					complete = true;
+			
+			}
 		}
+				
 		
-		//Enroll In Course Based on CourseID
-		System.out.print("Please enter the course ID of the course that you wish to register for.");
-		int courseIDToRegister = in.nextInt();
-		Course courseToRegister = currentCourseList.get(courseIDToRegister);
-		loggedInStudent.enrollInCourse(courseToRegister);
-		
-		//Drop Course Based on CourseID
-		System.out.print("Please enter the course ID of the course that you wish to drop.");
-		int courseIDToDrop = in.nextInt();
-		Course courseToDrop = currentCourseList.get(courseIDToDrop);
-		loggedInStudent.dropCourse(courseToDrop);
 
 	}
 
