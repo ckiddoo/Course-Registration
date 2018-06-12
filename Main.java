@@ -50,7 +50,6 @@ public class Main {
 		}
 		fileRead.close();
 		//If it is a new email, add email to student list
-		//TODO ask if email was entered correctly
 		if(!studentFound){
 			System.out.println("It seems that this is your first time logging in"
 					+ ", welcome! \n Please enter your password");

@@ -57,6 +57,7 @@ public class CourseList extends HashMap<Integer, Course> {
 		orderedCourses.add(allCourses[0]);
 		for(Course course : allCourses){
 			String nameOfInsert = course.getName();
+			boolean added = false;
 			for(Course courseInOrder : orderedCourses){
 				String nameToCompare = courseInOrder.getName();
 				if(nameOfInsert.compareToIgnoreCase(nameToCompare)==0){
@@ -64,13 +65,12 @@ public class CourseList extends HashMap<Integer, Course> {
 				}
 				else if(nameOfInsert.compareToIgnoreCase(nameToCompare)<0){
 					orderedCourses.add(orderedCourses.indexOf(courseInOrder), course);
+					added = true;
 					break;
 				}
-				else{
-					orderedCourses.add(course);
-					break;
-				}
-				
+			}
+			if(added == false){
+				orderedCourses.add(course);
 			}
 		}
 		return orderedCourses;
