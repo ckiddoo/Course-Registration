@@ -53,6 +53,7 @@ public class Student {
 					fw.write(System.getProperty("line.separator")+this.getEmail()+","+courseToEnroll.getCourseID()+","+"1");
 					fw.close();
 				}
+				sc.close();
 				System.out.println("You have successfully enrolled in " 
 						+ courseToEnroll.getName());
 			} catch (IOException e) {

@@ -56,9 +56,17 @@ public class Main {
 					+ ", welcome! \n Please enter your password");
 			password = in.next();
 			try {
-				PrintWriter pw = new PrintWriter(studentList);
-				pw.write(email+","+password+"\n");
-				pw.close();
+				FileWriter fw = new FileWriter(studentList,true);
+				Scanner sc = new Scanner(studentList);
+				if(!sc.hasNextLine()){
+					fw.write(email+","+password);
+					fw.close();
+				}
+				else{
+					fw.write(System.getProperty("line.separator")+email+","+password);
+					fw.close();
+				}
+				sc.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -76,12 +84,13 @@ public class Main {
 		}
 		
 		//Add previously registered courses to student's registered courses
+		Map<Integer,Integer> coursesFromEnrollment = new HashMap<Integer,Integer>();
 		Scanner readEnrollment = new Scanner(enrollmentData);
 		while(readEnrollment.hasNextLine()){
 			String nextLine = readEnrollment.nextLine();
 			String[] lineData = nextLine.split(",");
 			String emailInFile = lineData[0];
-			Map<Integer,Integer> coursesFromEnrollment = new HashMap<Integer,Integer>();
+
 			if(emailInFile.equals(loggedInStudent.getEmail())){
 				if(coursesFromEnrollment.get(Integer.parseInt(lineData[1])) == null){
 					coursesFromEnrollment.put(Integer.parseInt(lineData[1]), Integer.parseInt(lineData[2]));
@@ -92,6 +101,7 @@ public class Main {
 					coursesFromEnrollment.put(Integer.parseInt(lineData[1]), status);
 				}
 			}
+		}
 			for(Map.Entry<Integer, Integer> entry : coursesFromEnrollment.entrySet()){
 				int enrolledStatus = entry.getValue();
 				if(enrolledStatus == 1){
@@ -100,7 +110,7 @@ public class Main {
 					loggedInStudent.addCourseToEnrolled(courseToAdd);
 				}
 			}
-		}
+		
 		readEnrollment.close();
 		
 		boolean complete = false;
@@ -116,7 +126,8 @@ public class Main {
 			switch(optionSelected){
 			//Print all available courses
 			//TODO Adjust Print to Print Format
-			case 1: 	ArrayList<Course> orderedCourses= currentCourseList.getCoursesInOrder();
+			case 1: 	System.out.println("Course ID | Course Name | Course Description | Start Date| End Date | Max Enrollment | Current Enrollment");
+						ArrayList<Course> orderedCourses= currentCourseList.getCoursesInOrder();
 						for(Course course : orderedCourses){
 							System.out.println(course.getCourseID()+"|"+course.getName()+"|"+course.getDescription()+"|"
 							+course.getStartDate()+"|"+course.getEndDate()+"|"+course.getMaxEnrollment()+"|"+
