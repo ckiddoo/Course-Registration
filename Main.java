@@ -8,10 +8,13 @@ public class Main {
 	private static CourseList currentCourseList;
 
 	public static void main(String[] args) throws IOException {
-		// Auto-generated method stub
-		
+		// Create necessary files if do not exist
+		File enrollmentData = new File("enrollment_data.txt");
+		enrollmentData.createNewFile();
+		File courseListFile = new File("course_list.txt");
+		courseListFile.createNewFile();
 		//Prompt to sign in or create new user
-		System.out.print("Please enter your email");
+		System.out.println("Please enter your email");
 		in = new Scanner(System.in);
 		String email = in.next();
 		String password = "";
@@ -30,15 +33,15 @@ public class Main {
 			//If student email if found, ask for password (continue asking until right)
 			if(email.equals(emailInFile)){
 				studentFound = true;
-				System.out.print("Please enter your password");
+				System.out.println("Please enter your password");
 				while(!loginSuccessful){
 					password = in.next();
 					if(password.equals(passwordInFile)){
-						System.out.print("You have successfully logged in. \n");
+						System.out.println("You have successfully logged in.");
 						loginSuccessful = true;
 				}
 					else{
-						System.out.print("You have entered an incorrect password"
+						System.out.println("You have entered an incorrect password"
 								+ ", please try again");
 					}
 				}
@@ -47,9 +50,9 @@ public class Main {
 		}
 		fileRead.close();
 		//If it is a new email, add email to student list
-		//To Do ask if email was entered correctly
+		//TODO ask if email was entered correctly
 		if(!studentFound){
-			System.out.print("It seems that this is your first time logging in"
+			System.out.println("It seems that this is your first time logging in"
 					+ ", welcome! \n Please enter your password");
 			password = in.next();
 			try {
@@ -68,12 +71,11 @@ public class Main {
 		try {
 			currentCourseList = new CourseList();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(-1);
 		}
 		
 		//Add previously registered courses to student's registered courses
-		File enrollmentData = new File("enrollment_data.txt");
 		Scanner readEnrollment = new Scanner(enrollmentData);
 		while(readEnrollment.hasNextLine()){
 			String nextLine = readEnrollment.nextLine();
@@ -101,11 +103,12 @@ public class Main {
 					+ "2. Courses I have already registered for \n"
 					+ "3. Register for a course \n"
 					+ "4. Drop a course \n"
-					+ "5. Exit");
+					+ "5. Exit \n");
 			int optionSelected = in.nextInt();
 			
 			switch(optionSelected){
 			//Print all available courses
+			//TODO Adjust Print to Print Format
 			case 1: 	ArrayList<Course> orderedCourses= currentCourseList.getCoursesInOrder();
 						for(Course course : orderedCourses){
 							System.out.println(course.getCourseID()+"|"+course.getName()+"|"+course.getDescription()+"|"
@@ -117,19 +120,32 @@ public class Main {
 							break;
 			
 			//Enroll In Course Based on CourseID
-			case 3:	System.out.print("Please enter the course ID of the course that you wish to register for.");
+			case 3:	System.out.println("Please enter the course ID of the course that you wish to register for.");
 					int courseIDToRegister = in.nextInt();
-					Course courseToRegister = currentCourseList.get(courseIDToRegister);
-					loggedInStudent.enrollInCourse(courseToRegister);
-					break;
+					if(currentCourseList.get(courseIDToRegister)==null){
+						System.out.println("That is not a valid course ID, please try again.");
+						break;
+					}
+					else {
+						Course courseToRegister = currentCourseList.get(courseIDToRegister);
+						loggedInStudent.enrollInCourse(courseToRegister);
+						break;						
+					}
 					//Drop Course Based on CourseID
 			case 4: 			
-					System.out.print("Please enter the course ID of the course that you wish to drop.");
+					System.out.println("Please enter the course ID of the course that you wish to drop.");
 					int courseIDToDrop = in.nextInt();
-					Course courseToDrop = currentCourseList.get(courseIDToDrop);
-					loggedInStudent.dropCourse(courseToDrop);
-					break;
-			case 5: System.out.print("Thank you for signing in.");
+					if(currentCourseList.get(courseIDToDrop)==null){
+						System.out.println("That is not a valid course ID, please try again.");
+						break;
+					}
+					else{
+						Course courseToDrop = currentCourseList.get(courseIDToDrop);
+						loggedInStudent.dropCourse(courseToDrop);
+						break;
+					}
+					
+			case 5: System.out.println("Session has ended, please visit again soon.");
 					complete = true;
 			
 			}

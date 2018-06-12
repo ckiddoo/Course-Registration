@@ -7,18 +7,24 @@ import java.util.*;
 public class CourseList extends HashMap<Integer, Course> {
 		
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
 	public CourseList() throws ParseException, FileNotFoundException{
 			File courseListFile = new File("course_list.txt");
 			Scanner courseListScanner = new Scanner(courseListFile);
 			while(courseListScanner.hasNextLine()){
 				String nextLine = courseListScanner.nextLine();
-				String[] courseElements = nextLine.split(",");
-				int courseID = Integer.parseInt(courseElements[0]);
-				Date startDate = new SimpleDateFormat("dd/MM/yyyy").parse(courseElements[1]);
-				Date endDate = new SimpleDateFormat("dd/MM/yyyy").parse(courseElements[2]);
-				String name = courseElements[3];
-				String description = courseElements[4];
-				int maxEnrollment = Integer.parseInt(courseElements[5]);
+				String[] courseElements = nextLine.split("\\|");
+				int courseID = Integer.parseInt(courseElements[0].trim());
+				Date startDate = new SimpleDateFormat("dd/MM/yyyy").parse(courseElements[1].trim());
+				Date endDate = new SimpleDateFormat("dd/MM/yyyy").parse(courseElements[2].trim());
+				String name = courseElements[3].trim();
+				String description = courseElements[4].trim();
+				int maxEnrollment = Integer.parseInt(courseElements[5].trim());
 				int currentEnrollment = this.getEnrollmentFromFile(courseID);
 				Course courseToAdd = new Course(courseID,startDate,endDate,name,description,maxEnrollment,currentEnrollment);
 				this.put(courseID, courseToAdd);
@@ -46,14 +52,22 @@ public class CourseList extends HashMap<Integer, Course> {
 	
 	
 	public ArrayList<Course> getCoursesInOrder(){
-		Course[] allCourses = (Course[]) this.values().toArray();
+		Course[] allCourses = this.values().toArray(new Course[this.values().size()]);
 		ArrayList<Course> orderedCourses = new ArrayList<Course>();
-		for(Course course: allCourses){
+		orderedCourses.add(allCourses[0]);
+		for(Course course : allCourses){
 			String nameOfInsert = course.getName();
 			for(Course courseInOrder : orderedCourses){
 				String nameToCompare = courseInOrder.getName();
-				if(nameOfInsert.compareToIgnoreCase(nameToCompare)<0){
+				if(nameOfInsert.compareToIgnoreCase(nameToCompare)==0){
+					break;
+				}
+				else if(nameOfInsert.compareToIgnoreCase(nameToCompare)<0){
 					orderedCourses.add(orderedCourses.indexOf(courseInOrder), course);
+					break;
+				}
+				else{
+					orderedCourses.add(course);
 					break;
 				}
 				
