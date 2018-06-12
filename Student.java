@@ -43,9 +43,16 @@ public class Student {
 			File enrollmentData = new File("enrollment_data.txt");
 			try {
 				enrollmentData.createNewFile();
-				PrintWriter pw = new PrintWriter(enrollmentData);
-				pw.write(this.getEmail()+","+courseToEnroll.getCourseID()+","+"1"+"\n");
-				pw.close();
+				FileWriter fw = new FileWriter(enrollmentData,true);
+				Scanner sc = new Scanner(enrollmentData);
+				if(!sc.hasNextLine()){
+					fw.write(this.getEmail()+","+courseToEnroll.getCourseID()+","+"1");
+					fw.close();
+				}
+				else{
+					fw.write(System.getProperty("line.separator")+this.getEmail()+","+courseToEnroll.getCourseID()+","+"1");
+					fw.close();
+				}
 				System.out.println("You have successfully enrolled in " 
 						+ courseToEnroll.getName());
 			} catch (IOException e) {
@@ -66,9 +73,9 @@ public class Student {
 			File enrollmentData = new File("enrollment_data.txt");
 			try {
 				enrollmentData.createNewFile();
-				PrintWriter pw = new PrintWriter(enrollmentData);
-				pw.write(this.getEmail()+","+courseToDrop.getCourseID()+","+"-1"+"\n");
-				pw.close();
+				FileWriter fw = new FileWriter(enrollmentData,true);
+				fw.write(System.getProperty("line.separator")+this.getEmail()+","+courseToDrop.getCourseID()+","+"-1");
+				fw.close();
 				System.out.println("You have successfully dropped " 
 						+ courseToDrop.getName());
 			} catch (IOException e) {
