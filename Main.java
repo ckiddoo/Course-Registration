@@ -124,7 +124,6 @@ public class Main {
 			
 			switch(optionSelected){
 			//Print all available courses
-			//TODO Adjust Print to Print Format
 			case 1: 	System.out.println("Course ID | Course Name | Course Description | Start Date| End Date | Max Enrollment | Current Enrollment");
 						ArrayList<Course> orderedCourses= currentCourseList.getCoursesInOrder();
 						for(Course course : orderedCourses){
@@ -132,6 +131,7 @@ public class Main {
 							+course.getStartDate()+"|"+course.getEndDate()+"|"+course.getMaxEnrollment()+"|"+
 							course.getCurrentEnrollment());
 			}break;
+			
 			//Print Courses that student is currently enrolled in
 			case 2: 		loggedInStudent.getEnrolledCourses();
 							break;
@@ -148,7 +148,7 @@ public class Main {
 						loggedInStudent.enrollInCourse(courseToRegister);
 						break;						
 					}
-					//Drop Course Based on CourseID
+			//Drop Course Based on CourseID
 			case 4: 			
 					System.out.println("Please enter the course ID of the course that you wish to drop.");
 					int courseIDToDrop = in.nextInt();
