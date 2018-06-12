@@ -83,7 +83,14 @@ public class Main {
 			String emailInFile = lineData[0];
 			Map<Integer,Integer> coursesFromEnrollment = new HashMap<Integer,Integer>();
 			if(emailInFile.equals(loggedInStudent.getEmail())){
-				coursesFromEnrollment.put(Integer.parseInt(lineData[1]), Integer.parseInt(lineData[2]));
+				if(coursesFromEnrollment.get(Integer.parseInt(lineData[1])) == null){
+					coursesFromEnrollment.put(Integer.parseInt(lineData[1]), Integer.parseInt(lineData[2]));
+				}
+				else{
+					int status = coursesFromEnrollment.get(Integer.parseInt(lineData[1]));
+					status += Integer.parseInt(lineData[2]);
+					coursesFromEnrollment.put(Integer.parseInt(lineData[1]), status);
+				}
 			}
 			for(Map.Entry<Integer, Integer> entry : coursesFromEnrollment.entrySet()){
 				int enrolledStatus = entry.getValue();
