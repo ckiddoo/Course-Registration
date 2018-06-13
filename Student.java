@@ -86,7 +86,7 @@ public class Student {
 		}
 		else{
 			System.out.println("You are not currently enrolled in "
-					+ courseToDrop + "therefore it cannot be dropped.");
+					+ courseToDrop.getName() + "therefore it cannot be dropped.");
 		}
 	}
 	
